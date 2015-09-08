@@ -1,1 +1,49 @@
-<div>This is the rogue view.</div>
+<navbar></navbar>
+
+<h1>{{currentuser.name}}'s Rogue's</h1>
+<div class="row">
+	<div class="panel panel-default">
+		<div class="col-lg-4" ng-repeat="rogue in rogues">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{{rogue.name}}
+					<button type="button" class="btn btn-primary" ng-click = "showDetails(rogue)">Edit Rogue</button>
+					<button type="button" class="btn btn-primary" ng-click = "viewReadings(rogue)">View Reading Data</button>
+				</div>
+				<div class="panel-body">
+					<p>{{rogue.info}}</p>
+					<p>{{rogue.roguetype}}</p>
+				</div>
+				<div class="panel-footer">
+					{{rogue.location}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form role="form" ng-show = "showForm">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Currently Selected Rogue: {{currentRogue.name}}
+		</div>
+		<div class="panel-body">
+			<label ng-repeat="option in radioOptions">
+				<input type="radio" ng-model="currentRogue.roguetype"
+				ng-value="option">{{option}}</input>
+			</label>
+			<div class="form-group">
+				<label>Location</label>
+				<input class="form-control" ng-model = "currentRogue.location" placeholder="Enter text">
+			</div>
+			<div class="form-group">
+				<label>Information</label>
+				<input class="form-control" ng-model = "currentRogue.info" placeholder="Enter text">
+			</div>
+		</div>
+		<div class="panel-footer">
+			<button type="button" class="btn btn-primary" ng-click = "saveRogue(currentRogue)">Save Rogue</button>
+		</div>
+	</div>
+	
+</form>

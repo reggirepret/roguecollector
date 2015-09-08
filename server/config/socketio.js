@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/rogue/rogue.socket').register(socket);
   require('../api/reading/reading.socket').register(socket);
   require('../api/rouge/rouge.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
@@ -53,7 +54,7 @@ module.exports = function(socketio) {
     });
     socket.on('readingemit', function(data){
       var Reading = require('../api/reading/reading.model');
-      Reading.create(reading);
+      Reading.create(data);
     });
     socket.on('newRogueIncoming', function() {
       console.log("newRogueIncoming event occured");
@@ -61,7 +62,14 @@ module.exports = function(socketio) {
       var d = {location: 'unknown'};
       Rogue.create(d, function(err,rogue){
         socket.emit('newRogueCreated', rogue);
+        console.log("test event is going to fire now");
+        socket.emit('updateRogue', rogue);
       });
+    });
+    socket.on('updateRogueServer', function(data){
+      console.log("event fired on server");
+        socket.emit('updateRogue', data);
+      console.log("updateRogue finished, testevent emitted");
     });
     // Call onConnect.
     onConnect(socket);

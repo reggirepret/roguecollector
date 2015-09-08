@@ -7,6 +7,7 @@
 
 var Thing = require('../api/thing/thing.model');
 var User = require('../api/user/user.model');
+var Rogue = require('../api/rogue/rogue.model');
 
 Thing.find({}).removeAsync()
   .then(function() {
@@ -57,4 +58,16 @@ User.find({}).removeAsync()
     .then(function() {
       console.log('finished populating users');
     });
+  });
+
+  Rogue.find({}).removeAsync()
+  .then(function() {
+    Rogue.createAsync({
+      roguetype: 'windturbine',
+      name: 'first one'
+    }, {
+      name: 'second'
+    }, {
+      name: 'third'
+    })
   });

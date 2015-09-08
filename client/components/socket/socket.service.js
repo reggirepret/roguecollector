@@ -69,6 +69,10 @@ angular.module('roguecollectorv20App')
       unsyncUpdates: function (modelName) {
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
+      },
+      emitRogueChanges: function (Rogue) {
+        console.info("emitRogueChanges event fired" + Rogue._id);
+        socket.emit('updateRogueServer', Rogue);
       }
     };
   });

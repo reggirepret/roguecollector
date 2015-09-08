@@ -165,6 +165,10 @@ angular.module('roguecollectorv20App')
        */
       getToken: function() {
         return $cookies.get('token');
+      },
+      getID: function(){
+        currentUser = User.get();
+        return currentUser._id;
       }
     };
   });
