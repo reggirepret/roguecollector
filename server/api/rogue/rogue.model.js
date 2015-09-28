@@ -9,7 +9,8 @@ var RogueSchema = new Schema({
 	location: String,
   	info: {type: String, default: 'Data regarding location'},
   	userid: Schema.Types.ObjectId,
-  	active: {type: Boolean, default: true}
+  	sensors: Schema.Types.Mixed,
+  	active: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('Rogue', RogueSchema);

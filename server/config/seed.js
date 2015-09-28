@@ -8,36 +8,28 @@
 var Thing = require('../api/thing/thing.model');
 var User = require('../api/user/user.model');
 var Rogue = require('../api/rogue/rogue.model');
+var Reading = require('../api/reading/reading.model');
 
 Thing.find({}).removeAsync()
   .then(function() {
     Thing.create({
-      name: 'Development Tools',
-      info: 'Integration with popular tools such as Bower, Grunt, Karma, ' +
-             'Mocha, JSHint, Node Inspector, Livereload, Protractor, Jade, ' +
-             'Stylus, Sass, CoffeeScript, and Less.'
+      name: 'Real time monitoring',
+      info: 'Monitor any of your distributed systems, in real time!'
     }, {
-      name: 'Server and Client integration',
-      info: 'Built with a powerful and fun stack: MongoDB, Express, ' +
-             'AngularJS, and Node.'
+      name: 'Over air programming',
+      info: 'Setup your Rogue using an online portal, no wires required'
     }, {
-      name: 'Smart Build System',
-      info: 'Build system ignores `spec` files, allowing you to keep ' +
-             'tests alongside code. Automatic injection of scripts and ' +
-             'styles into your index.html'
+      name: 'Smart data display',
+      info: 'View your collected data in elegant graphs'
     }, {
       name: 'Modular Structure',
-      info: 'Best practice client and server structures allow for more ' +
-             'code reusability and maximum scalability'
+      info: 'Can easily scale to cater to all your needs'
     }, {
-      name: 'Optimized Build',
-      info: 'Build process packs up your templates as a single JavaScript ' +
-             'payload, minifies your scripts/css/images, and rewrites asset ' +
-             'names for caching.'
+      name: 'Node based client',
+      info: 'Connect any Internet of things device to your profile!'
     }, {
       name: 'Deployment Ready',
-      info: 'Easily deploy your app to Heroku or Openshift with the heroku ' +
-             'and openshift subgenerators'
+      info: 'Node ready for deployment on BeagleBone black'
     });
   });
 
@@ -63,11 +55,21 @@ User.find({}).removeAsync()
   Rogue.find({}).removeAsync()
   .then(function() {
     Rogue.createAsync({
-      roguetype: 'windturbine',
-      name: 'first one'
+      roguetype: 'Wind Turbine',
+      name: 'first one',
+      sensors: {'BMP1080': false, 'SHT21': false}
     }, {
       name: 'second'
     }, {
       name: 'third'
+    })
+  });
+
+  Reading.find({}).removeAsync()
+  .then(function(){
+    Reading.createAsync({
+      timestamp: new Date(),
+      value: 2,
+      datatype: 'BMP180'
     })
   });
