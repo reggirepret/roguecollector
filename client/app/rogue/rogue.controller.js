@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('roguecollectorv20App')
-.controller('RogueCtrl',function($scope, $http, socket, User, Auth) {
+.controller('RogueCtrl',function($scope, $http, socket, User, Auth, $filter) {
 	$scope.myrogues = [];
   $scope.incomingRogues = [];
   $scope.currentRogueID = [];
@@ -52,8 +52,9 @@ angular.module('roguecollectorv20App')
   	$scope.currentRogue = Rogue;
     $scope.currentRogueID = Rogue._id;
   	$http.get('/api/readings').then(function(response) {
-  		$scope.currentRogueReadings = response.data;
-  		console.log($scope.currentRogueReadings);
+      $scope.currentRogueReadings = $filter('filter')(response.data, { rogueid: $scope.currentRogue._id });
+      console.log($scope.currentRogueReadings);
+      console.log(response.data);
   		socket.syncUpdates('reading', $scope.currentRogueReadings);
   	});
 };
@@ -92,7 +93,10 @@ angular.module('roguecollectorv20App')
     //send rogue details update on Socket
     socket.emit("updateRogueServer", rogue);
   };
-  $scope.renderReading = function(sensorValue){
-    console.log(sensorValue);
+  $scope.deleteRogue = function(rogue){
+    $http.delete('/api/rogues/' + rogue._id);
   };
+  $scope.$on('$destroy', function() {
+      socket.unsyncUpdates('rogue');
+    });
 });

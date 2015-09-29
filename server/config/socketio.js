@@ -56,8 +56,6 @@
       socket.on('readingemit', function(data){
         var Reading = require('../api/reading/reading.model');
         Reading.create(data, function(err, reading){
-          console.log("reading created");
-          console.log("New reading ID: " + reading._id);
         });
       });
       socket.on('newRogueIncoming', function() {
@@ -71,6 +69,9 @@
       socket.on('updateRogueServer', function(data){
         socketio.emit("updateRogueClient", data);
         console.log("complete rogue object: " + data.sensors);
+      });
+      socket.on("deleteRogue", function(data){
+        socketio.emit("deleteRogueClient", data);
       });
       socket.on("blinkLightsServer", function(data){
         socketio.emit("blinkLightsClient", data);
