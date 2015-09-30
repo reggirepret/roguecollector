@@ -10,7 +10,7 @@ angular.module('roguecollectorv20App')
 	$scope.currentuser = User.get();
 	$scope.currentuserid = Auth.getID();
 	$scope.radioOptions = ['Wind Turbine', 'Solar Panel', 'Weatherstation', 'Windpump'];
-  $scope.readingRadioOptions = [{sensorname: 'BMP180'}, {sensorname: 'MCP9808'}, {sensorname: 'MAX31855'}, {sensorname: 'TMP006'}, {sensorname: 'ADC1'}, {sensorname: 'ADC2'}, {sensorname: 'ADC3'}];
+  $scope.readingRadioOptions = [{sensorname: 'BMP180'}, {sensorname: 'MCP9808'}, {sensorname: 'MAX31855'}, {sensorname: 'TMP006'}, {sensorname: 'ADC1'}, {sensorname: 'ADC2'}, {sensorname: 'ADC3'}, {sensorname: 'ADC4'}, {sensorname: 'ADC5'}, {sensorname: 'ADC6'}];
   $scope.selectedReadingOption = {sensorname: 'MCP9808'};
   $scope.rogueAcitveOptions = [true, false];
 
@@ -54,7 +54,6 @@ angular.module('roguecollectorv20App')
   	$http.get('/api/readings').then(function(response) {
       $scope.currentRogueReadings = $filter('filter')(response.data, { rogueid: $scope.currentRogue._id });
       console.log($scope.currentRogueReadings);
-      console.log(response.data);
   		socket.syncUpdates('reading', $scope.currentRogueReadings);
   	});
 };
@@ -81,6 +80,7 @@ angular.module('roguecollectorv20App')
 		$scope.showReadingForm = 0;
 		$scope.showRogues = 1;
 		$scope.currentRogue = [];
+    $scope.selectedReadingOption = {sensorname: 'MCP9808'};
 		console.log("this function fires");
 	};
   $scope.blinkLights = function(rogue){
