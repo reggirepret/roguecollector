@@ -28,6 +28,22 @@ angular.module('roguecollectorv20App')
   	$scope.myrogues = response.data;
   	socket.syncUpdates('rogue', $scope.myrogues);
   });
+$scope.data2 = [];
+
+$scope.options = {
+  axes: {x: {type: "date"}},
+  series: [
+    {
+      y: "value",
+      label: "A time series",
+      color: "#9467bd"
+    }
+  ],
+  tooltip: {
+    mode: "none",
+    
+  }
+};
 
   $scope.addRogue = function() {
   	if ($scope.newRogue === '') {
@@ -53,7 +69,7 @@ angular.module('roguecollectorv20App')
     $scope.currentRogueID = Rogue._id;
   	$http.get('/api/readings').then(function(response) {
       $scope.currentRogueReadings = $filter('filter')(response.data, { rogueid: $scope.currentRogue._id });
-      console.log($scope.currentRogueReadings);
+      $scope.populateGraph($scope.currentRogueReadings);
   		socket.syncUpdates('reading', $scope.currentRogueReadings);
   	});
 };
@@ -96,7 +112,27 @@ angular.module('roguecollectorv20App')
   $scope.deleteRogue = function(rogue){
     $http.delete('/api/rogues/' + rogue._id);
   };
+  $scope.populateGraph = function(currentRogueReadings){
+    //console.log(currentRogueReadings);
+    angular.forEach(currentRogueReadings, function(obj){
+       var tempdata = {x: new Date(), value: 3};
+       tempdata.x = obj.timestamp;
+       tempdata.value = obj.value;
+       //console.log(tempdata.x);
+       //console.log(tempdata.y);
+       $scope.data2.push(tempdata);
+    });
+    $scope.data2.forEach(function(row) {
+    row.x = new Date(row.x);
+    console.log(row.x);
+  });
+
+  };
+  $scope.onToggle = function(d, i, visible){
+    console.log(d, i, visible);
+  };
   $scope.$on('$destroy', function() {
       socket.unsyncUpdates('rogue');
     });
+
 });

@@ -68,8 +68,20 @@ User.find({}).removeAsync()
   Reading.find({}).removeAsync()
   .then(function(){
     Reading.createAsync({
-      timestamp: new Date(),
+      timestamp: new Date(1000),
       value: 2,
+      datatype: 'BMP180'
+    },{
+      timestamp: new Date(2000),
+      value: 5,
+      datatype: 'BMP180'
+    },{
+      timestamp: new Date(3000),
+      value: 8,
+      datatype: 'BMP180'
+    },{
+      timestamp: new Date(4000),
+      value: 10,
       datatype: 'BMP180'
     })
   });
