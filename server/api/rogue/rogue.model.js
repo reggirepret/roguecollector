@@ -9,8 +9,19 @@ var RogueSchema = new Schema({
 	location: String,
   	info: {type: String, default: 'Data regarding location'},
   	userid: Schema.Types.ObjectId,
-  	sensors: Schema.Types.Mixed,
-  	active: {type: Boolean, default: false}
+  	sensors: {type:Schema.Types.Mixed, default: [
+  	{name: 'BMP180', value: false, unit:"Temperature [deg C]"}, 
+  	{name: 'MCP9808', value:true, unit:"Temperature [deg C]"}, 
+  	{name: 'MAX31855', value:false, unit:"Temperature [deg C]"}, 
+  	{name: 'TMP006', value:false, unit:"Temperature [deg C]"},
+  	{name: 'ADC1', value:false, unit:"Volts [V]"},
+  	{name: 'ADC2', value:false, unit:"Volts [V]"},
+  	{name: 'ADC3', value:false, unit:"Volts [V]"},
+  	{name: 'ADC4', value:false, unit:"Volts [V]"},
+  	{name: 'ADC5', value:false, unit:"Volts [V]"},
+  	{name: 'ADC6', value:false, unit:"Volts [V]"}]},
+  	active: {type: Boolean, default: false},
+  	numerOfSensors: {type: Number, default: 10}
 });
 
 module.exports = mongoose.model('Rogue', RogueSchema);

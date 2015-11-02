@@ -56,8 +56,8 @@ User.find({}).removeAsync()
   .then(function() {
     Rogue.createAsync({
       roguetype: 'Wind Turbine',
-      name: 'first one',
-      sensors: {'BMP1080': false, 'SHT21': false}
+      name: 'Jeffreys Bay Wind Farm Unit 1',
+      _id: '5621751c5bb7b503003828a0'
     }, {
       name: 'second'
     }, {
@@ -70,18 +70,57 @@ User.find({}).removeAsync()
     Reading.createAsync({
       timestamp: new Date(1000),
       value: 2,
-      datatype: 'BMP180'
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
     },{
       timestamp: new Date(2000),
       value: 5,
-      datatype: 'BMP180'
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
     },{
       timestamp: new Date(3000),
       value: 8,
-      datatype: 'BMP180'
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
     },{
       timestamp: new Date(4000),
+      value: 3,
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(6000),
+      value: 6,
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(8000),
       value: 10,
-      datatype: 'BMP180'
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(10000),
+      value: 2,
+      datatype: 'BMP180',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(5000),
+      value: 30,
+      datatype: 'ADC1',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(6000),
+      value: 20,
+      datatype: 'ADC1',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(7000),
+      value: 10,
+      datatype: 'ADC1',
+      rogueid: '5621751c5bb7b503003828a0'
+    },{
+      timestamp: new Date(8000),
+      value: 50,
+      datatype: 'ADC2',
+      rogueid: '5621751c5bb7b503003828a0'
     })
   });

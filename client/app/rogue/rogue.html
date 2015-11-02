@@ -1,28 +1,4 @@
 <navbar></navbar>
-<h1>New Rogue's</h1>
-<div class="row" ng-show = "showRogues">
-	<div class="panel panel-default">
-		<div class="col-lg-4" ng-repeat="rogue in incomingRogues">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{{rogue.name}}
-					<button type="button" class="btn btn-primary" ng-click = "showDetails(rogue)">Edit Rogue</button>
-					<button type="button" class="btn btn-primary" ng-click = "blinkLights(rogue)">Blink Lights</button>
-					<button type="button" class="btn btn-primary" ng-click = "claimRogue(rogue)">Collect Rogue</button>
-				</div>
-				<div class="panel-body">
-					<p>{{rogue.active}}</p>
-					<p>{{rogue.info}}</p>
-					<p>{{rogue.roguetype}}</p>
-				</div>
-				<div class="panel-footer">
-					{{rogue.location}}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <h1>{{currentuser.name}}'s Rogue's</h1>
 <div class="row" ng-show = "showRogues">
 	<div class="panel panel-default">
@@ -64,28 +40,13 @@
 		</div>
 		<div class = "form-group"
 			<label>Rogue Active Sensors:</label>
-			<label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.BMP180"> BMP180
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.MCP9808"> MCP9808
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.MAX31855"> MAX31855
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.TMP006"> TMP006
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.ADC1"> ADC1
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.ADC2"> ADC2
-            </label>
-            <label class="checkbox-inline">
-                <input type="checkbox" name="connectedSensors" ng-model="currentRogue.sensors.ADC3"> ADC3
-            </label>
+			<div>
+			<label ng-repeat="sensor in currentRogue.sensors">
+	        	<input type="checkbox" name="sensor.name" ng-model="sensor.value"></input>
+	        	{{sensor.name}}</label>
+			</div>
 		</div>
+		
 		<div class = "form-group"
 		<label>Set Recording Status:</label>
 			<label ng-repeat="option in rogueAcitveOptions">
@@ -115,7 +76,17 @@
 
 <div class="container" ng-show="showReadingForm">
   <h2> {{currentRogue.name}}'s readings and stats</h2>
-  <table class="table table-bordered">
+  <form name="myForm">
+    <label for="singleSelect"> Sensor: </label><br>
+    <select name="singleSelect" ng-model="selectedReadingOption" ng-options="sensoroption.name for sensoroption in currentRogue.sensors"></select>
+	<button type="button" class="btn btn-primary" ng-click = "searchReadings()" >Search</button> 
+	<button type="button" class="btn btn-primary" ng-click = "doneViewing()" >Done</button>  
+</form>
+
+<div ng-show="showGraph">
+<linechart data="data2" options="options" on-toggle="onToggle"></linechart>
+</div>
+  <table class="table table-bordered" ng-show="showGraph">
   	<thead>
   		<tr>
   			<th>Statistic</th>
@@ -125,19 +96,17 @@
   	<tbody>
   		<tr>
   			<td>Average:</td>
-  			<td>{{averageValue(currentRogueReadings)}}</td>
+  			<td>{{averageValue(currentRogueReadingsTemp)}}</td>
   		</tr>
   		<tr>
   			<td>Standard Deviation:</td>
-  			<td>{{standardDeviation(currentRogueReadings)}}</td>
+  			<td>{{standardDeviation(currentRogueReadingsTemp)}}</td>
   		</tr>
   	</tbody>
   </table> 
-  <form name="myForm">
-    <label for="singleSelect"> Sensor: </label><br>
-    <select name="singleSelect" ng-model="selectedReadingOption" ng-options="sensoroption.sensorname for sensoroption in readingRadioOptions"></select> 
-	<button type="button" class="btn btn-primary" ng-click = "doneViewing()" >Done</button>           
-  <table class="table table-bordered">
+
+</div>         
+  <!--<table class="table table-bordered">
     <thead>
       <tr>
         <th>Reading Date</th>
@@ -151,11 +120,10 @@
         <td>{{reading.datatype}}</td>
       </tr>
     </tbody>
-  </table>
+  </table>-->
   
-</div>
-<div>
-<linechart data="data2" options="options" on-toggle="onToggle"></linechart>
-</div>
+
+
+
 
 <footer></footer>

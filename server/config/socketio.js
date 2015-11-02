@@ -61,7 +61,7 @@
       socket.on('newRogueIncoming', function() {
         console.log("newRogueIncoming event occured");
         var Rogue = require('../api/rogue/rogue.model');
-        var d = {location: 'unknown', sensors: {"BMP180": false, "MCP9808":false, "MAX31855":false, "TMP006":false, "ADC1":false, "ADC2":false, "ADC3":false, "ADC4":false, "ADC5":false, "ADC6":false}};
+        var d = {location: 'unknown'};
         Rogue.create(d, function(err,rogue){
           socket.emit('newRogueCreated', rogue);
         });
@@ -75,6 +75,9 @@
       });
       socket.on("blinkLightsServer", function(data){
         socketio.emit("blinkLightsClient", data);
+      });
+      socket.on('validateRogue', function(data){
+        //check if rogue is still on server.
       });
       // Call onConnect.
       onConnect(socket);

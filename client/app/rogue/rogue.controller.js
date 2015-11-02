@@ -3,10 +3,7 @@
 angular.module('roguecollectorv20App')
 .controller('RogueCtrl',function($scope, $http, socket, User, Auth, $filter) {
 	$scope.myrogues = [];
-  $scope.incomingRogues = [];
   $scope.currentRogueID = [];
-	$scope.currentuser = [];
-	$scope.currentuserid = [];
 	$scope.currentuser = User.get();
 	$scope.currentuserid = Auth.getID();
 	$scope.radioOptions = ['Wind Turbine', 'Solar Panel', 'Weatherstation', 'Windpump'];
@@ -20,7 +17,10 @@ angular.module('roguecollectorv20App')
   $scope.showRogues = 1;
   $scope.currentRogue = [];
   $scope.currentRogueReadings = [];
+  $scope.currentRogueReadingsTemp = [];
   $scope.averageValue = [];
+  $scope.showGraph = 0;
+  $scope.selectedUnit = "";
 
   //TODO: only get my rouges and unassigned rouges
   //get rouges that are unassigned, add them to the incoming rogues list.
@@ -30,20 +30,7 @@ angular.module('roguecollectorv20App')
   });
 $scope.data2 = [];
 
-$scope.options = {
-  axes: {x: {type: "date"}},
-  series: [
-    {
-      y: "value",
-      label: "A time series",
-      color: "#9467bd"
-    }
-  ],
-  tooltip: {
-    mode: "none",
-    
-  }
-};
+
 
   $scope.addRogue = function() {
   	if ($scope.newRogue === '') {
@@ -54,9 +41,11 @@ $scope.options = {
   };
   $scope.showDetails = function(Rogue){
   	$scope.showEditForm = 1;
+    $scope.showRogues = 0;
   	$scope.currentRogue = Rogue;
   };
   $scope.saveRogue = function(Rogue){
+    $scope.showRogues = 1;
   	$http.put('/api/rogues/' + Rogue._id, Rogue);
   	socket.emitRogueChanges(Rogue);
   	$scope.showEditForm = 0;
@@ -68,8 +57,8 @@ $scope.options = {
   	$scope.currentRogue = Rogue;
     $scope.currentRogueID = Rogue._id;
   	$http.get('/api/readings').then(function(response) {
-      $scope.currentRogueReadings = $filter('filter')(response.data, { rogueid: $scope.currentRogue._id });
-      $scope.populateGraph($scope.currentRogueReadings);
+      $scope.currentRogueReadings = response.data
+      console.log(currentRogueReadings);
   		socket.syncUpdates('reading', $scope.currentRogueReadings);
   	});
 };
@@ -96,30 +85,46 @@ $scope.options = {
 		$scope.showReadingForm = 0;
 		$scope.showRogues = 1;
 		$scope.currentRogue = [];
+    $scope.data2 = [];
+    $scope.showGraph = 0;
+    $scope.currentRogueReadings = [];
+    $scope.currentRogueReadingsTemp = [];
     $scope.selectedReadingOption = {sensorname: 'MCP9808'};
-		console.log("this function fires");
 	};
-  $scope.blinkLights = function(rogue){
-    socket.emit("blinkLightsServer", rogue);
+  $scope.searchReadings = function(){
+      $scope.currentRogueReadingsTemp = $filter('filter')($scope.currentRogueReadings, { rogueid: $scope.currentRogueID, datatype: $scope.selectedReadingOption.name });
+      $scope.selectedUnit = $scope.selectedReadingOption.unit;
+      $scope.populateGraph($scope.currentRogueReadingsTemp);
+      $scope.showGraph = 1;
+      socket.syncUpdates('reading', $scope.currentRogueReadingsTemp);
   };
-  $scope.claimRogue = function(rogue){
-    //mark rogue._id == currentuser._id
-    //update DB
-    $http.put('/api/rogues/' + rogue._id, rogue);
-    //send rogue details update on Socket
-    socket.emit("updateRogueServer", rogue);
+  $scope.blinkLights = function(rogue){
+    socket.blinkLights(rogue);
   };
   $scope.deleteRogue = function(rogue){
     $http.delete('/api/rogues/' + rogue._id);
   };
   $scope.populateGraph = function(currentRogueReadings){
     //console.log(currentRogueReadings);
+    $scope.options = {
+  axes: {x: {type: "date"}},
+  series: [
+    {
+      y: "value",
+      label: "Currently viewing a time series with: " + $scope.selectedUnit + " units",
+      color: "#9467bd"
+    }
+  ],
+  tooltip: {
+    mode: "none",
+    
+  }
+};
+    $scope.data2 = [];
     angular.forEach(currentRogueReadings, function(obj){
        var tempdata = {x: new Date(), value: 3};
        tempdata.x = obj.timestamp;
        tempdata.value = obj.value;
-       //console.log(tempdata.x);
-       //console.log(tempdata.y);
        $scope.data2.push(tempdata);
     });
     $scope.data2.forEach(function(row) {
